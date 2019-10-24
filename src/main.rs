@@ -9,6 +9,7 @@ extern crate serde_derive;
 use rocket_contrib::json::Json;
 use rocket::State;
 use std::sync::{Mutex};
+use std::collections::HashMap;
 
 fn default_reflme() -> bool {
     true
@@ -34,23 +35,26 @@ fn empty_msg() -> Message {
     }
 }
 
-type Messages = Mutex<Vec<Message>>;
+type Messages = Mutex<HashMap<String,Vec<Message>>>;
 
-#[post("/push", format = "json", data = "<input>")]
-fn push(input: Json<Message>, state: State<Messages>) -> &'static str {
+#[post("/<id>/push", format = "json", data = "<input>")]
+fn push(id: String, input: Json<Message>, state: State<Messages>) -> &'static str {
     let mut messages = state.lock().expect("state lock");
-    messages.push(input.0);
+    let v = messages.entry(id).or_insert(vec![]);
+    v.push(input.0);
     "saved"
 }
 
-#[get("/pop")]
-fn pop(state: State<Messages>) -> Json<Message> {
+#[get("/<id>/pop")]
+fn pop(id: String, state: State<Messages>) -> Json<Message> {
     let mut messages = state.lock().expect("state lock");
-    Json(messages.pop().unwrap_or(empty_msg()))
+    println!("{:#?}", messages);
+    let v = messages.entry(id).or_insert(vec![]);
+    Json(v.pop().unwrap_or(empty_msg()))
 }
 
 fn main() {
-    let state: Messages = Mutex::new(vec![]);
+    let state: Messages = Mutex::new(HashMap::new());
     rocket::ignite()
         .mount("/", routes![push, pop])
         .manage(state)
