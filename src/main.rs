@@ -20,8 +20,11 @@ struct Message {
     #[serde(default="default_reflme", rename(serialize = "refl.me"))]
     reflme: bool,
     message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     title: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     image: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     go_link: Option<String>,
 }
 
