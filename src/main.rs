@@ -24,6 +24,16 @@ struct Message {
     go_link: Option<String>,
 }
 
+func empty_msg() -> Message {
+    Message {
+        reflme: false,
+        message: "",
+        title: None,
+        image: None,
+        go_link: None,
+    }
+}
+
 type Messages = Mutex<Vec<Message>>;
 
 #[post("/push", format = "json", data = "<input>")]
@@ -36,8 +46,7 @@ fn push(input: Json<Message>, state: State<Messages>) -> &'static str {
 #[get("/pop")]
 fn pop(state: State<Messages>) -> Option<Json<Message>> {
     let mut messages = state.lock().expect("state lock");
-    messages.pop().map(|m| Json(m))
-
+    Json(messages.pop().unwrap_or(empty_msg()))
 }
 
 fn main() {
