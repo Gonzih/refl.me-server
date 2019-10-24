@@ -48,7 +48,6 @@ fn push(id: String, input: Json<Message>, state: State<Messages>) -> &'static st
 #[get("/<id>/pop")]
 fn pop(id: String, state: State<Messages>) -> Json<Message> {
     let mut messages = state.lock().expect("state lock");
-    println!("{:#?}", messages);
     let v = messages.entry(id).or_insert(vec![]);
     Json(v.pop().unwrap_or(empty_msg()))
 }
