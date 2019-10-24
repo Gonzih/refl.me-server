@@ -1,5 +1,4 @@
 [![CircleCI](https://circleci.com/gh/Gonzih/refl.me-server.svg?style=svg)](https://circleci.com/gh/Gonzih/refl.me-server)
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 Simple web server to be used with https://refl.me/ app.
 
