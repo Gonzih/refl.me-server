@@ -10,15 +10,18 @@ use rocket_contrib::json::Json;
 use rocket::State;
 use std::sync::{Mutex};
 
-fn reflme() -> bool {
+fn default_reflme() -> bool {
     true
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Message {
-    #[serde(default="reflme", rename(serialize = "refl.me"))]
+    #[serde(default="default_reflme", rename(serialize = "refl.me"))]
     reflme: bool,
     message: String,
+    title: Option<String>,
+    image: Option<String>,
+    go_link: Option<String>,
 }
 
 type Messages = Mutex<Vec<Message>>;
