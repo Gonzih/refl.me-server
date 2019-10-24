@@ -24,10 +24,10 @@ struct Message {
     go_link: Option<String>,
 }
 
-func empty_msg() -> Message {
+fn empty_msg() -> Message {
     Message {
         reflme: false,
-        message: "",
+        message: "".to_owned(),
         title: None,
         image: None,
         go_link: None,
@@ -44,7 +44,7 @@ fn push(input: Json<Message>, state: State<Messages>) -> &'static str {
 }
 
 #[get("/pop")]
-fn pop(state: State<Messages>) -> Option<Json<Message>> {
+fn pop(state: State<Messages>) -> Json<Message> {
     let mut messages = state.lock().expect("state lock");
     Json(messages.pop().unwrap_or(empty_msg()))
 }
