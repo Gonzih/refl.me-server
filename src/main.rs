@@ -6,10 +6,10 @@ extern crate rocket_contrib;
 #[macro_use]
 extern crate serde_derive;
 
-use rocket_contrib::json::Json;
 use rocket::State;
-use std::sync::{Mutex};
+use rocket_contrib::json::Json;
 use std::collections::HashMap;
+use std::sync::Mutex;
 
 fn default_reflme() -> bool {
     true
@@ -17,7 +17,7 @@ fn default_reflme() -> bool {
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Message {
-    #[serde(default="default_reflme", rename(serialize = "refl.me"))]
+    #[serde(default = "default_reflme", rename(serialize = "refl.me"))]
     reflme: bool,
     message: String,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -38,7 +38,7 @@ fn empty_msg() -> Message {
     }
 }
 
-type Messages = Mutex<HashMap<String,Vec<Message>>>;
+type Messages = Mutex<HashMap<String, Vec<Message>>>;
 
 #[post("/<id>/push", format = "json", data = "<input>")]
 fn push(id: String, input: Json<Message>, state: State<Messages>) -> &'static str {
