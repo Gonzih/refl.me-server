@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/Gonzih/refl.me-server.svg?style=svg)](https://circleci.com/gh/Gonzih/refl.me-server)
+![Build](https://github.com/Gonzih/refl.me-server/workflows/CI/badge.svg)
 
 Simple web server to be used with https://refl.me/ app.
 
